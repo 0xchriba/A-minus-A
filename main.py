@@ -6,6 +6,8 @@ import requests
    2. Build out the Alibaba API side
    3. Create a function that finds the price differential between the two
    4. Build out the front-end"""
+
+ """Add keys to the top"""
 url = "https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=sr_1_1?ie=UTF8&qid=1506151336&sr=8-1&keywords=echo"
 def get_asin(url):
     asin_scraper = r'/([A-Z0-9]{10})'
