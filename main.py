@@ -2,21 +2,19 @@ from amazon.api import AmazonAPI
 from datetime import datetime
 import re
 import requests
-"""1. Find a way to create a function that given a keyword returns the respective ItemId
+"""1. Find a way to get url of first search result
    2. Build out the Alibaba API side
    3. Create a function that finds the price differential between the two
    4. Build out the front-end"""
-
-url = 'https://www.amazon.com/s?keyword=macbook'
-htmltext = requests.get(url).content
-pattern = re.compile(r"https://www.amazon.com/.*/dp(.*?)\"")
-# final = re.findall(htmltext,pattern)
+url = "https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=sr_1_1?ie=UTF8&qid=1506151336&sr=8-1&keywords=echo"
+def get_asin(url):
+    asin_scraper = r'/([A-Z0-9]{10})'
+    result = re.search(asin_scraper,url).group(1)
+    return result
 
 
 # from amazonproduct import API
-access_key = 'AKIAJ5KTDL536GDNI57Q'
-secret_key = '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'
-assoc_tag = 'ibafeva-20'
+
 amazon = AmazonAPI(access_key,secret_key, assoc_tag)
 def find_price():
     product = amazon.lookup(ItemId='B01G1XH46M')
