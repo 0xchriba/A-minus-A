@@ -7,26 +7,27 @@ import requests
    3. Create a function that finds the price differential between the two
    4. Build out the front-end"""
 
- """Add keys to the top"""
-url = "https://www.amazon.com/Amazon-Echo-Dot-Portable-Bluetooth-Speaker-with-Alexa-Black/dp/B01DFKC2SO/ref=sr_1_1?ie=UTF8&qid=1506151336&sr=8-1&keywords=echo"
+"""Add keys to the top"""
+
+
+amazon = AmazonAPI(access_key,secret_key, assoc_tag)
+
+test_url = "https://www.amazon.com/Channel-Well-Stackable-Wireless-Qi-enabled/dp/B01MR498XW/ref=sr_1_1_sspa?ie=UTF8&qid=1506152977&sr=8-1-spons&keywords=power+bank&psc=1"
+
 def get_asin(url):
     asin_scraper = r'/([A-Z0-9]{10})'
+    # asin_scraper = r'https://www.amazon.com/.*/dp/(.*)\''
     result = re.search(asin_scraper,url).group(1)
     return result
 
-
-# from amazonproduct import API
-
-amazon = AmazonAPI(access_key,secret_key, assoc_tag)
-def find_price():
-    product = amazon.lookup(ItemId='B01G1XH46M')
+def find_price(asin_id):
+    product = amazon.lookup(ItemId=asin_id)
     title = product.title
     price = product.price_and_currency
     if price[1] == 'USD':
         print(title)
-        # return price[0]
-# find_price()
-# time = datetime.now()
-# print(time)
+        print(price[0])
+        return price[0]
 
-# 'http://webservices.amazon.com/onca/xml?%20Service=AWSECommerceService%20&Operation=ItemSearch%20&ResponseGroup=Small%20&SearchIndex=All%20&Keywords=' + keyword + '&AWSAccessKeyId=AKIAJ5KTDL536GDNI57Q&AssociateTag=ibafeva-20&Timestamp=' + '2017-09-23T00:57:26-05:00' + '&Signature=AKIAJ5KTDL536GDNI57Q+U4kMqptyqXQ2bFvPfqr8LRymwIletYCQk5f7lbY'
+asin_id = get_asin(test_url)
+price = find_price(asin_id)
