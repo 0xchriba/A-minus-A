@@ -22,6 +22,11 @@ soup = bs.BeautifulSoup(sauce, 'lxml')
 soup_page = soup.body
 soup_page = soup_page.find('div', class_='l-page')
 
+def get_asin(url):
+    asin_scraper = r'/([A-Z0-9]{10})'
+  # asin_scraper = r'https://www.amazon.com/.*/dp/(.*)\''
+    result = re.search(asin_scraper,url).group(1)
+    return result
 
 
 def find_price(asin_id):
