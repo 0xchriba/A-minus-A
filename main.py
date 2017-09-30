@@ -7,9 +7,10 @@ from urllib.request import urlopen
 import json
 
 """ Access Keys"""
-access_key = 'AKIAJ5KTDL536GDNI57Q'
-secret_key = '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'
-assoc_tag = 'ibafeva-20'
+"""Enter Access Keys Before Running"""
+access_key = None
+secret_key = None
+assoc_tag = None
 
 """--------AMAZON-------"""
 
@@ -28,24 +29,11 @@ def get_list_href(keyword):
     amazon_url_request = requests.get(amazon_url, headers=headers)
     amazon_url_request.raise_for_status()
     soup_final = bs.BeautifulSoup(amazon_url_request.text, 'lxml')
-
-    # List all URL in with /dp/
     list_href = [el["href"] for el in soup_final.findAll("a", href=re.compile("/dp/"))]
-
-    # # Extract asin
-    # m = re.search('(?<=/dp/)\w+', mystring)
-    # print(m.group(0))
-
     return list_href
 
 
 """Gets the asin id out of a URL string"""
-# def get_asin(url):
-#     asin_scraper = r'/([A-Z0-9]{10})'
-#     result = re.search(asin_scraper,url).group(1)
-#     return result
-
-# Gets list of asin ids out of a list of URLs
 def get_list_asin(list_href):
     asin_list = []
     for address in list_href:
@@ -60,8 +48,6 @@ def find_price(asin_id):
     if price[0] == None or price[0] == 0:
         return None
     return price[0]
-    # print (title)
-    # print (price[0])
 
 """Prints the Product names and titles from a list"""
 def get_list_prices(asin_list):
@@ -72,12 +58,7 @@ def get_list_prices(asin_list):
     return list_prices
 
 
-#
-# for i, product in enumerate(products):
-#     print("{0}. '{1}'".format(product.title, product.price_and_currency[0]))
-
 """------ALIBABA-------"""
-
 
 def get_alibaba_html(keyword):
     keyword = keyword.replace(' ', '+')
@@ -88,14 +69,11 @@ def get_alibaba_html(keyword):
     list_html = alibaba_html.split('price')
     return list_html
 
-
 def get_price_list(html):
     price_list = []
     for item in html:
         price_list.append(item[0:20])
     return price_list
-
-
 
 def get_result(price_list):
     result = []
@@ -120,16 +98,11 @@ def average_prices(list):
         total += i
     return total/len(list)
 
-
 def full_amazon(keyword):
     list_href = get_list_href(keyword)
     asin_list = get_list_asin(list_href)
     result_amazon = get_list_prices(asin_list[0:3])
     return result_amazon
-
-
-keyword = "unicycle"
-
 
 def full_alibaba(keyword):
     list_html = get_alibaba_html(keyword)
@@ -137,10 +110,9 @@ def full_alibaba(keyword):
     result_alibaba = get_result(price_list)
     return result_alibaba
 
-
-
 def get_amazon_minus_alibaba(keyword):
-
     amazon_final = full_amazon(keyword)
     alibaba_final = full_alibaba(keyword)
-    return average_prices(amazon_final) - average_prices(alibaba_final)
+    price_differential= average_prices(amazon_final) - average_prices(alibaba_final)
+    String = 'The net price differential of the amazon price minus the alibaba price for the' + keyword + ' is :' + str(price_differential)
+    return String
